@@ -1,12 +1,15 @@
+import os
+from langchain_openai import ChatOpenAI
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
+from crewai_tools import SerperDevTool, ScrapeWebsiteTool
+from .tools.custom_tool import DocxReportGenerator
+from dotenv import load_dotenv
 
-# Uncomment the following line to use an example of a custom tool
-# from maf_comparator.tools.custom_tool import MyCustomTool
-# from maf_comparator.tools.docx_report_generator import DocxReportGenerator
+load_dotenv()
 
-# Check our tools documentations for more information on how to use them
-# from crewai_tools import SerperDevTool, BaseTool
+SERPER_API_KEY = os.getenv('SERPER_API_KEY')
+
 
 @CrewBase
 class MafComparatorCrew():
@@ -14,44 +17,60 @@ class MafComparatorCrew():
     agents_config = 'config/agents.yaml'
     tasks_config = 'config/tasks.yaml'
 
+    def __init__(self):
+        self.serper_dev_tool = SerperDevTool()
+        self.scrape_website_tool = ScrapeWebsiteTool()
+        self.docx_report_generator = DocxReportGenerator()
+
     @agent
     def criteria_developer(self) -> Agent:
+        # No external tools required for criteria development
         return Agent(
             config=self.agents_config['criteria_developer'],
-            verbose=True
+            tools=[self.serper_dev_tool, self.scrape_website_tool],
+            verbose=True,
+            max_iter=2
         )
 
     @agent
     def researcher(self) -> Agent:
-        # Example of using a custom search tool, like SerperDevTool for web searches
-        # tools=[SerperDevTool()],
+        # Using SerperDevTool and ScrapeWebsiteTool for web searches and scraping
         return Agent(
             config=self.agents_config['researcher'],
-            verbose=True
+            tools=[self.serper_dev_tool, self.scrape_website_tool],
+            verbose=True,
+            max_iter=3
         )
 
     @agent
     def analyzer(self) -> Agent:
+        # Analysis may not require specific tools beyond internal logic
         return Agent(
             config=self.agents_config['analyzer'],
-            verbose=True
+            verbose=True,
+            max_iter=2
         )
 
     @agent
     def writer(self) -> Agent:
-        # Assuming DocxReportGenerator is a custom tool for generating .docx reports
-        # tools=[DocxReportGenerator()],
+        # Configuring DocxReportGenerator for generating .docx reports
         return Agent(
             config=self.agents_config['writer'],
-            verbose=True
+            tools=[self.docx_report_generator],
+            verbose=True,
+            max_iter=2
         )
 
     @agent
     def qa_agent(self) -> Agent:
+        # QA process might be primarily manual; no specific tools added
         return Agent(
             config=self.agents_config['qa_agent'],
-            verbose=True
+            verbose=True,
+            max_iter=2
         )
+
+    # Define tasks here using @task decorator
 
     @task
     def criteria_development_task(self) -> Task:
@@ -91,10 +110,13 @@ class MafComparatorCrew():
 
     @crew
     def crew(self) -> Crew:
-        """Creates the MafComparator crew"""
+        """Creates the MafComparator crew with a hierarchical process."""
+
+
         return Crew(
-            agents=self.agents, # Automatically created by the @agent decorator
-            tasks=self.tasks, # Automatically created by the @task decorator
-            process=Process.sequential,
+            agents=self.agents,  # Automatically created by the @agent decorator
+            tasks=self.tasks,  # Automatically created by the @task decorator
+            manager_llm=ChatOpenAI(temperature=0, model="gpt-4"),
+            process=Process.hierarchical,
             verbose=2,
         )

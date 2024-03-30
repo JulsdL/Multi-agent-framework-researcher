@@ -1,8 +1,8 @@
 criteria_development_task:
   description: >
     Develop a comprehensive set of criteria for comparing multi-agent frameworks and
-    establish a 5-star rating system for evaluation. Focus on aspects like scalability,
-    performance, ease of use, community support, and documentation quality.
+    establish a 10 point rating system for evaluation. Focus on aspects like scalability,
+    performance, production readiness, ease of use, community support, and documentation quality.
   expected_output: >
     A detailed document outlining the comparison criteria and the notation system
     for evaluating each multi-agent framework.

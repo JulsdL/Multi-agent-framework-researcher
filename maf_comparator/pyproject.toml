@@ -8,6 +8,7 @@ authors = ["Your Name <you@example.com>"]
 python = ">=3.10,<=3.13"
 crewai = {extras = ["tools"], version = "^0.22.2"}
 python-docx = "^1.1.0"
+tavily-python = "^0.3.3"
 
 [tool.poetry.scripts]
 maf_comparator = "maf_comparator.main:run"
