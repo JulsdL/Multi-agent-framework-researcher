@@ -1,0 +1,45 @@
+criteria_development_task:
+  description: >
+    Develop a comprehensive set of criteria for comparing multi-agent frameworks and
+    establish a 5-star rating system for evaluation. Focus on aspects like scalability,
+    performance, ease of use, community support, and documentation quality.
+  expected_output: >
+    A detailed document outlining the comparison criteria and the notation system
+    for evaluating each multi-agent framework.
+
+research_task:
+  description: >
+    Gather detailed information on each specified multi-agent framework including
+    CrewAI, LangGraph, MetaGPT, etc. Pay special attention to features, scalability,
+    use cases, community support, and performance metrics.
+  expected_output: >
+    A comprehensive report containing all gathered information, organized by
+    framework, with at least 10 bullet points of relevant information for each.
+
+analysis_task:
+  description: >
+    Analyze the collected information on multi-agent frameworks using the developed
+    criteria and rating system. Evaluate each framework's strengths, weaknesses,
+    and overall performance.
+  expected_output: >
+    An analysis report rating each framework according to the established criteria,
+    with commentary on their strengths and weaknesses.
+
+writing_task:
+  description: >
+    Compile the analysis into a structured comparison report in Word (.docx) format.
+    The report should include an introduction, a page dedicated to each framework,
+    a comparison based on criteria, a summary page, and a final comparison table.
+  expected_output: >
+    A detailed comparison report in .docx format, adhering to the specified structure
+    and content requirements, ready for review.
+
+quality_assurance_task:
+  description: >
+    Review the comparison report for accuracy, completeness, and adherence to the
+    specified format. Ensure that each framework has a dedicated page, the comparison
+    criteria are clearly explained, and the final comparison table is accurately
+    assembled.
+  expected_output: >
+    Feedback on the comparison report, indicating any areas for improvement or
+    corrections needed to meet the project's quality standards.
